@@ -2,16 +2,17 @@ const express = require('express');
 
 const app = express();
 
-app.use("/user", (req, res, next)=>{
-   // res.send("response1");
-    next();
-}, (req, res, next) =>{
-    //res.send("response2")
-    next();
-}, (req,res, next)=>{
-    res.send("3response");
-}
-);
+const { adminAuth } = require("./middlewares/auth");
+
+app.use("/admin", adminAuth);
+
+app.get("/admin/getAllData", (req, res, next) =>{
+    res.send("All Data Sent");
+});
+
+app.get("/admin/DeleteData", (req, res, next)=>{
+    res.send("Deleted All Data");
+});
 
 
 
