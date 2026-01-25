@@ -2,16 +2,17 @@ const express = require('express');
 
 const app = express();
 
-const { adminAuth } = require("./middlewares/auth");
 
-app.use("/admin", adminAuth);
 
-app.get("/admin/getAllData", (req, res, next) =>{
-    res.send("All Data Sent");
-});
+app.use("/user", (req, res)=>{
+    throw new  Error("bsdk");
+    res.send("fetched all data");
+})
 
-app.get("/admin/DeleteData", (req, res, next)=>{
-    res.send("Deleted All Data");
+app.use("/", (err, req, res, next) =>{
+    if(err){
+        res.status(500).send("something went wrong");
+    }
 });
 
 
