@@ -56,18 +56,31 @@ app.patch("/user", async (req, res)=>{
     const emailId = req.body.emailId;
     const data = req.body;
 
+    const updates = Object.keys(req.body).filter(
+        key => key !== "emailId"
+    );
+
+    const allowedUpdates = ["skills", "userId"];
+
+    const isAllowed = updates.every((k)=>
+        allowedUpdates.includes(k)
+    );
+
+    if(!isAllowed){
+        res.status(400).send("Invalid update field");
+    }
+
     try{
         const updatedUser = await User.findOneAndUpdate(
             {emailId: emailId}, 
             {$set: data},
-            {new: true}
+            {new: true, runValidators: true},
         );
         if(!updatedUser){
             return res.status(404).send("user not found");
         }
         res.send("user updated succesfully");
     }catch (err) {
-        console.log(err);
         res.status(400).send("something went wrong");
     }
 });
