@@ -29,6 +29,49 @@ app.get("/feed", async (req, res)=>{
     }
 })
 
+app.delete("/user", async (req, res)=>{
+    const userId = req.body.userId;
+    try {
+        const user = await User.findByIdAndDelete(userId);
+
+        res.send("user deleted succesfully");
+    }catch (err) {
+        res.status(400).send("Something went wrong");
+    }
+})
+
+/*app.patch("/user", async (req, res)=>{
+    const userId = req.body.userId;
+    const data =  req.body;
+
+    try {
+        const user = await User.findByIdAndUpdate({_id: userId}, data);
+        res.send("user updated successfully");
+    }catch (err){
+        res.status(400).send("something went wrong");
+    }
+});*/
+
+app.patch("/user", async (req, res)=>{
+    const emailId = req.body.emailId;
+    const data = req.body;
+
+    try{
+        const updatedUser = await User.findOneAndUpdate(
+            {emailId: emailId}, 
+            {$set: data},
+            {new: true}
+        );
+        if(!updatedUser){
+            return res.status(404).send("user not found");
+        }
+        res.send("user updated succesfully");
+    }catch (err) {
+        console.log(err);
+        res.status(400).send("something went wrong");
+    }
+});
+
 app.post("/signup", async (req, res)=>{
     const user = new User(req.body);
 
