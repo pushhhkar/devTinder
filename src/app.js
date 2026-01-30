@@ -52,52 +52,6 @@ app.delete("/user", async (req, res)=>{
     }
 })
 
-/*app.patch("/user", async (req, res)=>{
-    const userId = req.body.userId;
-    const data =  req.body;
-
-    try {
-        const user = await User.findByIdAndUpdate({_id: userId}, data);
-        res.send("user updated successfully");
-    }catch (err){
-        res.status(400).send("something went wrong");
-    }
-});*/
-
-app.patch("/user", async (req, res)=>{
-    const emailId = req.body.emailId;
-    const data = req.body;
-
-    const updates = Object.keys(req.body).filter(
-        key => key !== "emailId"
-    );
-
-    const allowedUpdates = ["skills", "userId"];
-
-    const isAllowed = updates.every((k)=>
-        allowedUpdates.includes(k)
-    );
-
-    if(!isAllowed){
-        res.status(400).send("Invalid update field");
-    }
-
-    try{
-        const updatedUser = await User.findOneAndUpdate(
-            {emailId: emailId}, 
-            {$set: data},
-            {new: true, runValidators: true},
-        );
-        if(!updatedUser){
-            return res.status(404).send("user not found");
-        }
-        res.send("user updated succesfully");
-    }catch (err) {
-        res.status(400).send("something went wrong");
-    }
-});
-
-
 connectDB()
     .then(()=>{
         console.log("Database connection established..");
