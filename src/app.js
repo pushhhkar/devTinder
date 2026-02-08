@@ -7,9 +7,9 @@ const bycrpt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
-
+console.log("FRONTEND_URL =", process.env.FRONTEND_URL);
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.FRONTEND_URL.trim(),
     credentials: true,
 }));
 app.use(express.json());
