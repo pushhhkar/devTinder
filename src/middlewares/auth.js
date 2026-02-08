@@ -7,7 +7,7 @@ try{
     if(!token){
         return res.status(401).send("Please Login")
     }
-    const decodeData = await jwt.verify(token, "DEV@Tinder$790");
+    const decodeData = await jwt.verify(token, process.env.JWT_SECRET);
 
     const { _id} = decodeData;
 
@@ -18,7 +18,7 @@ try{
     req.user = user;
     next();
 }catch(err){
-    res.status(400).send("ERROR :" + err.message);
+    res.status(401).send("ERROR :" + err.message);
 }
 }
 
