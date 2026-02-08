@@ -1,5 +1,6 @@
 const express = require('express');
 const connectDB = require("./config/database");
+require("dotenv").config();
 const app = express();
 const User = require("./models/user");
 const bycrpt = require("bcrypt");
@@ -8,7 +9,8 @@ const jwt = require("jsonwebtoken");
 const cors = require("cors");
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: [process.env.FRONTEND_URL,
+    process.env.FRONTEND_URL],
     credentials: true,
 }));
 app.use(express.json());
@@ -27,8 +29,9 @@ app.use("/", userRouter);
 connectDB()
     .then(()=>{
         console.log("Database connection established..");
-        app.listen(3000, () => {
-        console.log("server is successfully listening on port 3000..");
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+        console.log("server is successfully listening...");
         });
     })
     .catch((err) => {
